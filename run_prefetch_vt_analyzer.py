@@ -7,6 +7,11 @@ import traceback
 from windowsprefetch import Prefetch
 
 """
+    This script has limitations to query the VirusTotal API.
+    It doesn't query all prefetch resources, only three and then a malicious hash is fed.
+"""
+
+"""
 Future work: 
     - improve the volume mapping to the prefetch information
     - implement methods to perform concurrent requests
@@ -101,7 +106,9 @@ def vt_validate_hash(client: vt.Client, hash: str):
     """
     try:
         result = client.get_object(f"/files/{hash}")
-        if result.total_votes["malicious"] > 0:
+        if result.total_votes["malicious"] > 0 or \
+                ("malicious" in result.last_analysis_stats and result.last_analysis_stats["malicious"] > 0):
+            print(f"Encountered: {result.meaningful_name} {result.popular_threat_classification}")
             return result
     except vt.APIError as error:
         if "NotFoundError" in error.code:
@@ -121,7 +128,7 @@ def vt_validate_files(client: vt.Client, files: list):
     vt_results = {}
     it = 0
     for file in files:
-        if it == 3 and IS_TRIAL_KEY:
+        if it == 3 and IS_TRIAL_KEY: # you can remove this if block to experience the full power
             break
 
         hash = file_sha256(file)
@@ -145,9 +152,23 @@ def save_report(report: dict, filename: str = "virus-total-report.json"):
 
     with open(filename, 'w') as f:
         json.dump(temp, f)
+    print(f"See full report at {filename}")
+
+
+def greeting():
+    greeting = "Prefetch Resources Analyzer\n" + \
+        "The code is limited it won't query all the resources to the VirusTotal API.\n" + \
+        "You can check the source-code at https://github.com/jppdpf/prefetch-vt-analyzer, " \
+        "the limitations are marked you can remove them and experience full power.\n" + \
+        "It queries the first three resources.\n" \
+        "One bad dll hash is fed to mock a encountered dangerous resource."
+    print(greeting)
 
 
 if __name__ == '__main__':
+
+    greeting()
+    print("\n------------------------------\n")
 
     # volume information
     letter, serial_number = get_volume_info()
@@ -161,17 +182,16 @@ if __name__ == '__main__':
 
         report = vt_validate_files(VT_CLIENT, resources_path)
 
+        # the next four lines should also be removed if you desire to attain full power
         """ for testing purpose lets feed a malicious dll """
         hash_of_malicious_dll = "cf6992dd67403dd92d4111935c789bcb5aefbae2905f172ac11fe476a9d079a6"
         malicious = vt_validate_hash(VT_CLIENT, hash_of_malicious_dll)
         report[hash_of_malicious_dll] = malicious
 
+        print("\n------------------------------\n")
         save_report(report)
 
     except Exception:
         print(traceback.format_exc())
     finally:
         VT_CLIENT.close()
-
-
-
