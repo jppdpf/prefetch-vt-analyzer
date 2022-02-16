@@ -12,4 +12,15 @@ They are marked in the code, you can remove or just comment them, to experience 
 ## Need
 You need to get a VirusTotal API KEY.
 
-Also, you might need to run this script with Administrator privileges.
+## Run
+
+Make sure you have Administrator privileges, you might need them.
+
+First install its requirements.
+```bash
+python setup.py install
+```
+
+```bash
+python run_prefetch_vt_analyzer.py
+```
