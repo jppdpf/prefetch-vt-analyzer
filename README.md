@@ -12,9 +12,19 @@ They are marked in the code, you can remove or just comment them, to experience 
 ## Need
 You need to get a VirusTotal API KEY.
 
+
 ## Run
 
-Make sure you have Administrator privileges, you might need them.
+Clone this repository.
+
+Open the run_prefetch_vt_analyzer.py file.
+Replace <your-api-key> with (you guessed it) your VirusTotal API KEY
+```python
+VT_CLIENT = vt.Client("<your-api-key>")
+```
+Save the file.
+
+Open a command line with Administrator privileges, you mostly likely will need them.
 
 First install its requirements.
 ```bash
