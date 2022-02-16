@@ -8,3 +8,7 @@ And queries a hash of a malicious dll to mock a encountered dangerous resource.
 
 ## Limitations
 They are marked in the code, you can remove or just comment them, to experience the full power.
+
+## Need
+You need to get a VirusTotal API KEY.
+Also, you might need to run this script with Administrator privileges.
