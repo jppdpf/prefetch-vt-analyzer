@@ -21,6 +21,8 @@ First install its requirements.
 python setup.py install
 ```
 
+Now you can execute the script.
+
 ```bash
 python run_prefetch_vt_analyzer.py
 ```
