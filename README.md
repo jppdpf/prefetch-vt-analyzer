@@ -11,6 +11,7 @@ Plus one already known malicious dll hash value to mock a malicious finding.
 ## Need
 You need to get a VirusTotal API KEY.
 
+Administrator privileges to run the script.
 
 ## Run
 
