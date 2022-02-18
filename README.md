@@ -15,24 +15,22 @@ Administrator privileges to run the script.
 
 ## Run
 
-Clone this repository.
+### Clone this repository.
 
+### Insert VirusTotal API Key
 Open the run_prefetch_vt_analyzer.py file.
-Replace <your-api-key> with (you guessed it) your VirusTotal API KEY
 ```python
-import vt
-VT_CLIENT = vt.Client("<your-api-key>")
+  import vt
+  # replace the next line
+  VT_CLIENT = vt.Client("<your-api-key>")
 ```
 Save the file.
 
-Open a command line with Administrator privileges, you mostly likely will need them.
-
-First install its requirements.
+### Install its requirements.
 ```bash
 python setup.py install
 ```
-
-Now you can execute the script.
+### Open a console with Administrator Privilege
 
 ```bash
 python run_prefetch_vt_analyzer.py
