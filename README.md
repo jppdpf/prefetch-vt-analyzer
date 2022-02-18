@@ -8,9 +8,6 @@ PoC is good for PoC or a trial VirusTotal API key.
 This queries the first three resources from the prefetch files.
 Plus one already known malicious dll hash value to mock a malicious finding.
 
-## Limitations
-They are marked in the code, you can remove or just comment them, to experience the full power.
-
 ## Need
 You need to get a VirusTotal API KEY.
 
