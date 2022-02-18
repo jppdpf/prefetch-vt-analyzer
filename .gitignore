@@ -97,4 +97,6 @@ modules.xml
 # Sonarlint plugin
 .idea/sonarlint
 
+virus-total-report.json
+
 # End of https://www.toptal.com/developers/gitignore/api/pycharm+all

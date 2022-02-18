@@ -20,6 +20,7 @@ Clone this repository.
 Open the run_prefetch_vt_analyzer.py file.
 Replace <your-api-key> with (you guessed it) your VirusTotal API KEY
 ```python
+import vt
 VT_CLIENT = vt.Client("<your-api-key>")
 ```
 Save the file.
@@ -36,3 +37,8 @@ Now you can execute the script.
 ```bash
 python run_prefetch_vt_analyzer.py
 ```
+
+## Future work: 
+- add command line arguments
+- performing concurrent requests
+- improve the volume mapping

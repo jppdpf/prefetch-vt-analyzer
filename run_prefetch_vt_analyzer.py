@@ -1,3 +1,8 @@
+"""
+    Hashes every resource contained in the prefetch files
+    and queries VirusTotal with the hash value.
+"""
+
 import json
 import os
 import subprocess
@@ -6,16 +11,6 @@ import vt
 import traceback
 from windowsprefetch import Prefetch
 
-"""
-    This script has limitations to query the VirusTotal API.
-    It doesn't query all prefetch resources, only three and then a malicious hash is fed.
-"""
-
-"""
-Future work: 
-    - improve the volume mapping to the prefetch information
-    - implement methods to perform concurrent requests
-"""
 
 # checking if OS is a Windows
 if os.name is not 'nt':
@@ -23,11 +18,10 @@ if os.name is not 'nt':
 
 # setting up prefetch directory
 PREFETCH_DIR = os.path.join(os.getenv("windir"), "Prefetch")
-# VirusTotal Client
-VT_CLIENT = vt.Client("<your-api-key>")
 
-# this will limit the number of requests performed since trial key as limitations
-IS_TRIAL_KEY = True
+VIRUS_TOTAL_API_KEY = None
+# Proof of Concept or in case you have a trial limited VT key
+PoC_ACTIVE = True
 
 
 def file_sha256(filepath: str):
@@ -97,7 +91,7 @@ def get_prefetch_resources_path(prefetch_list: list, volume_letter: str, volume_
     return resources
 
 
-def vt_validate_hash(client: vt.Client, hash: str):
+def vt_validate(client: vt.Client, hash: str):
     """
     Uses the VirusTotal Client to validate the provided hash.
     :param client: virus total client
@@ -108,7 +102,7 @@ def vt_validate_hash(client: vt.Client, hash: str):
         result = client.get_object(f"/files/{hash}")
         if result.total_votes["malicious"] > 0 or \
                 ("malicious" in result.last_analysis_stats and result.last_analysis_stats["malicious"] > 0):
-            print(f"Encountered: {result.meaningful_name} {result.popular_threat_classification}")
+            print(f"Malicious Item Encountered: {hash} {result.meaningful_name} {result.popular_threat_classification}")
             return result
     except vt.APIError as error:
         if "NotFoundError" in error.code:
@@ -128,11 +122,12 @@ def vt_validate_files(client: vt.Client, files: list):
     vt_results = {}
     it = 0
     for file in files:
-        if it == 3 and IS_TRIAL_KEY: # you can remove this if block to experience the full power
+        if it == 3 and PoC_ACTIVE:
             break
 
         hash = file_sha256(file)
-        result = vt_validate_hash(client, hash)
+        print(f"Querying VT {file} - {hash}")
+        result = vt_validate(client, hash)
         if result:
             vt_results[hash] = result
         it += 1
@@ -152,16 +147,13 @@ def save_report(report: dict, filename: str = "virus-total-report.json"):
 
     with open(filename, 'w') as f:
         json.dump(temp, f)
-    print(f"See full report at {filename}")
 
 
 def greeting():
-    greeting = "Prefetch Resources Analyzer\n" + \
-        "The code is limited it won't query all the resources to the VirusTotal API.\n" + \
-        "You can check the source-code at https://github.com/jppdpf/prefetch-vt-analyzer, " \
-        "the limitations are marked you can remove them and experience full power.\n" + \
-        "It queries the first three resources.\n" \
-        "One bad dll hash is fed to mock a encountered dangerous resource."
+    greeting = "\nPrefetch File Resources Analyzer\n\n\n" + \
+        "If you have Proof Of Concept mode only three prefetch resources are queried.\n" \
+        "And one bad dll hash is fed to mock a encountered dangerous resource." + \
+        "\n\nFind more at https://github.com/jppdpf/prefetch-vt-analyzer."
     print(greeting)
 
 
@@ -170,10 +162,17 @@ if __name__ == '__main__':
     greeting()
     print("\n------------------------------\n")
 
-    # volume information
-    letter, serial_number = get_volume_info()
+    if not VIRUS_TOTAL_API_KEY:
+        print("Please insert a Virus Total API key.\n\n")
+        exit()
+
+    # VirusTotal Client
+    VT_CLIENT = vt.Client(VIRUS_TOTAL_API_KEY)
 
     try:
+
+        # volume information
+        letter, serial_number = get_volume_info()
 
         # get prefetch files from directory
         pf_files = get_prefetch_files(PREFETCH_DIR)
@@ -182,14 +181,16 @@ if __name__ == '__main__':
 
         report = vt_validate_files(VT_CLIENT, resources_path)
 
-        # the next four lines should also be removed if you desire to attain full power
-        """ for testing purpose lets feed a malicious dll """
-        hash_of_malicious_dll = "cf6992dd67403dd92d4111935c789bcb5aefbae2905f172ac11fe476a9d079a6"
-        malicious = vt_validate_hash(VT_CLIENT, hash_of_malicious_dll)
-        report[hash_of_malicious_dll] = malicious
+        if PoC_ACTIVE:
+            """ for testing purpose lets feed a malicious dll """
+            hash_of_malicious_dll = "cf6992dd67403dd92d4111935c789bcb5aefbae2905f172ac11fe476a9d079a6"
+            malicious = vt_validate(VT_CLIENT, hash_of_malicious_dll)
+            report[hash_of_malicious_dll] = malicious
 
         print("\n------------------------------\n")
-        save_report(report)
+        report_file='virus-total-report.json'
+        save_report(report, filename=report_file)
+        print(f"See full report at {report_file}\n")
 
     except Exception:
         print(traceback.format_exc())
