@@ -8,33 +8,26 @@ PoC is good for PoC or a trial VirusTotal API key.
 This queries the first three resources from the prefetch files.
 Plus one already known malicious dll hash value to mock a malicious finding.
 
-## Limitations
-They are marked in the code, you can remove or just comment them, to experience the full power.
-
-## Need
-You need to get a VirusTotal API KEY.
 
 
 ## Run
 
-Clone this repository.
+### Needs 
+- A VirusTotal API KEY.
 
+### Insert VirusTotal API Key
 Open the run_prefetch_vt_analyzer.py file.
-Replace <your-api-key> with (you guessed it) your VirusTotal API KEY
-```python
-import vt
-VT_CLIENT = vt.Client("<your-api-key>")
+Search the file for the following pattern and replace it.
+```bash
+"<your-api-key>"
 ```
 Save the file.
 
-Open a command line with Administrator privileges, you mostly likely will need them.
-
-First install its requirements.
+### Install the requirements.
 ```bash
 python setup.py install
 ```
-
-Now you can execute the script.
+### Open a console with Administrator Privilege
 
 ```bash
 python run_prefetch_vt_analyzer.py
@@ -43,3 +36,4 @@ python run_prefetch_vt_analyzer.py
 ## Future work: 
 - add command line arguments
 - performing concurrent requests
+- improve volume mapping
