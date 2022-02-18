@@ -102,7 +102,7 @@ def vt_validate(client: vt.Client, hash: str):
         result = client.get_object(f"/files/{hash}")
         if result.total_votes["malicious"] > 0 or \
                 ("malicious" in result.last_analysis_stats and result.last_analysis_stats["malicious"] > 0):
-            print(f"Malicious Item Encountered: {hash} {result.meaningful_name} {result.popular_threat_classification}")
+            print(f"Malicious. {result.meaningful_name} {hash} {result.popular_threat_classification}")
             return result
     except vt.APIError as error:
         if "NotFoundError" in error.code:
@@ -126,7 +126,7 @@ def vt_validate_files(client: vt.Client, files: list):
             break
 
         hash = file_sha256(file)
-        print(f"Querying VT {file} - {hash}")
+        print(f"Querying. {file} - {hash}")
         result = vt_validate(client, hash)
         if result:
             vt_results[hash] = result
