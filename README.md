@@ -21,11 +21,11 @@ Administrator privileges to run the script.
 Open the run_prefetch_vt_analyzer.py file.
 Search the file for the following pattern and replace it.
 ```bash
-  "<your-api-key>"
+"<your-api-key>"
 ```
 Save the file.
 
-### Install its requirements.
+### Install the requirements.
 ```bash
 python setup.py install
 ```
