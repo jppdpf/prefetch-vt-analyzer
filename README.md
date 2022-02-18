@@ -8,14 +8,12 @@ PoC is good for PoC or a trial VirusTotal API key.
 This queries the first three resources from the prefetch files.
 Plus one already known malicious dll hash value to mock a malicious finding.
 
-## Need
-You need to get a VirusTotal API KEY.
 
-Administrator privileges to run the script.
 
 ## Run
 
-### Clone this repository.
+### Needs 
+- A VirusTotal API KEY.
 
 ### Insert VirusTotal API Key
 Open the run_prefetch_vt_analyzer.py file.
