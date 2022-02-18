@@ -2,9 +2,11 @@
 
 Checks if prefetch files are loading known malicious items by querying VirusTotal with the items hash.
 
-## As is
-It queries the first three prefetch resources found. 
-Plus, queries a hash of a malicious dll to mock a encountered dangerous resource.
+## Proof Of Concept Mode
+PoC is good for PoC or a trial VirusTotal API key.
+
+This queries the first three resources from the prefetch files.
+Plus one already known malicious dll hash value to mock a malicious finding.
 
 ## Limitations
 They are marked in the code, you can remove or just comment them, to experience the full power.
@@ -41,4 +43,3 @@ python run_prefetch_vt_analyzer.py
 ## Future work: 
 - add command line arguments
 - performing concurrent requests
-- improve the volume mapping
