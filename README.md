@@ -17,9 +17,9 @@ Plus one already known malicious dll hash value to mock a malicious finding.
 
 ### Insert VirusTotal API Key
 Open the run_prefetch_vt_analyzer.py file.
-Search the file for the following pattern and replace it.
+Replace "None" with your API key, in string format.
 ```bash
-"<your-api-key>"
+Line 22: VIRUS_TOTAL_API_KEY = None
 ```
 Save the file.
 
