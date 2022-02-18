@@ -19,10 +19,9 @@ Administrator privileges to run the script.
 
 ### Insert VirusTotal API Key
 Open the run_prefetch_vt_analyzer.py file.
-```python
-  import vt
-  # replace the next line
-  VT_CLIENT = vt.Client("<your-api-key>")
+Search the file for the following pattern and replace it.
+```bash
+  "<your-api-key>"
 ```
 Save the file.
 
